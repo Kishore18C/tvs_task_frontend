@@ -1,0 +1,14 @@
+.input {
+  display: flex;
+  align-items: center;
+  /* background-color: brown; */
+}
+
+.inputkey {
+  width: 200px;
+  /* background-color: aqua; */
+}
+.inputvalue{
+margin-left: 105px;
+padding-left: 100px;
+}
