@@ -23,8 +23,8 @@ import * as authServices from "../services/authService";
 function LoginScreen(props) {
   const navigation = useNavigate();
   const [error, setError] = useState("");
-  const [email, setEmail] = useState("kishorec.ck@gmail.com");
-  const [password, setPassword] = useState("Kid@123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = async () => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, MenuItem, TextField, Button, IconButton } from "@mui/material";
+import { Box, MenuItem, TextField, Button } from "@mui/material";
 import Joi from "joi";
 import { useNavigate, useParams } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
@@ -31,7 +31,6 @@ export default function FormScreen() {
     try {
       const getUser = async (id) => {
         const user = await userServices.getUser(id);
-        console.log(user.data.data);
 
         if (user.status === 200) {
           setLastName(user.data.data.last_name);
@@ -68,7 +67,6 @@ export default function FormScreen() {
       status,
       aadhar_number: aadhar,
     };
-    console.log("user", user);
 
     const { error } = validateUser(user);
 
@@ -91,7 +89,7 @@ export default function FormScreen() {
             progress: undefined,
             theme: "colored",
           });
-          return; //   return navigate("/home");
+          return;
         }
       };
       userDetails(id, user);
@@ -99,235 +97,293 @@ export default function FormScreen() {
       console.log(error);
     }
   };
+  const logout = () => {
+    if (window.confirm("Are you sure, Do you want log out?")) {
+      localStorage.removeItem("token");
+      toast.info("Logged out!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      navigate("/", { replace: true });
+      return;
+    }
+    return;
+  };
+
+  const deleteUser = async () => {
+    try {
+      if (window.confirm("Are you sure, Do you want delete your account?")) {
+        const response = await userServices.deleteUser(id);
+        if (response.status === 200) {
+          localStorage.removeItem("token");
+
+          toast.success("Account deleted successfully!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          return navigate("/", { replace: true });
+        }
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        // alignItems: "center",
-        // height: "100%",
-      }}
-    >
-      {status ? (
-        <Box
-          component="form"
-          sx={{
-            "& .MuiTextField-root": { m: 1, width: "25ch" },
-            boxShadow: "rgba(0, 0, 0, 0.35) 0px 0px 8px",
-            padding: 5,
-            borderRadius: 2,
-            paddingTop: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            m: 2,
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <h2>PROFILE</h2>
-          <div className="input">
-            <p className="inputkey">First Name</p>:
-            <TextField
-              required
-              InputProps={{
-                readOnly: !edit,
-              }}
-              defaultValue={first_name}
-              id="standard-required"
-              variant="standard"
-              error={error.includes("First Name") ? true : false}
-              helperText={error.includes("First Name") ? error : ""}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
-          <div className="input">
-            <p className="inputkey">Last Name</p>:
-            <TextField
-              required
-              InputProps={{
-                readOnly: !edit,
-              }}
-              defaultValue={last_name}
-              id="standard-required"
-              variant="standard"
-              error={error.includes("Last Name") ? true : false}
-              helperText={error.includes("Last Name") ? error : ""}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </div>
-          <div className="input">
-            <p className="inputkey">Date of birth</p>:
-            <TextField
-              required
-              type="date"
-              id="standard-required"
-              variant="standard"
-              InputProps={{
-                readOnly: !edit,
-              }}
-              defaultValue={dob}
-              error={error.includes("Birth") ? true : false}
-              helperText={error.includes("Birth") ? error : ""}
-              onChange={(e) => setDob(e.target.value)}
-            />
-          </div>
-          <div className="input">
-            <p className="inputkey">Gender</p>:
-            <TextField
-              select
-              label="Select"
-              variant="standard"
-              error={error.includes("Gender") ? true : false}
-              helperText={error.includes("Gender") ? error : ""}
-              InputProps={{
-                readOnly: !edit,
-              }}
-              defaultValue={gender}
-              onChange={(e) => setGender(e.target.value)}
-            >
-              {["Male", "Female", "Other"].map((option, index) => (
-                <MenuItem key={index} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-            </TextField>
-          </div>
-          <div className="input">
-            <p className="inputkey">Age</p>:
-            <TextField
-              required
-              id="standard-required"
-              type="number"
-              variant="standard"
-              error={error.includes("Age") ? true : false}
-              helperText={error.includes("Age") ? error : ""}
-              InputProps={{
-                readOnly: !edit,
-              }}
-              defaultValue={age}
-              onChange={(e) => setAge(e.target.value)}
-            />
-          </div>
-          <div className="input">
-            <p className="inputkey">E-Mail</p>:
-            <TextField
-              required
-              id="standard-required"
-              InputProps={{
-                readOnly: true,
-              }}
-              variant="standard"
-              defaultValue={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="input">
-            <p className="inputkey">Phone Number</p>:
-            <TextField
-              required
-              id="standard-required"
-              InputProps={{
-                readOnly: !edit,
-              }}
-              variant="standard"
-              defaultValue={phone}
-              error={error.includes("Phone") ? true : false}
-              helperText={error.includes("Phone") ? error : ""}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
-          <div className="input">
-            <p className="inputkey">Address</p>:
-            <TextField
-              id="standard-multiline-flexible"
-              multiline
-              //   maxRows={4}
-              variant="standard"
-              error={error.includes("Address") ? true : false}
-              helperText={error.includes("Address") ? error : ""}
-              InputProps={{
-                readOnly: !edit,
-              }}
-              defaultValue={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </div>
-          <div className="input">
-            <p className="inputkey">Nationality</p>:
-            <TextField
-              required
-              id="standard-required"
-              variant="standard"
-              error={error.includes("Nationality") ? true : false}
-              helperText={error.includes("Nationality") ? error : ""}
-              InputProps={{
-                readOnly: !edit,
-              }}
-              defaultValue={nationality}
-              onChange={(e) => setNationality(e.target.value)}
-            />
-          </div>
-          <div className="input">
-            <p className="inputkey">Aadhar Number</p>:
-            <TextField
-              required
-              id="standard-required"
-              variant="standard"
-              error={error.includes("Aadhar") ? true : false}
-              helperText={error.includes("Aadhar") ? error : ""}
-              InputProps={{
-                readOnly: !edit,
-              }}
-              defaultValue={aadhar}
-              onChange={(e) => setAadhar(e.target.value)}
-            />
-          </div>
-          <div className="input">
-            <p className="inputkey">Status</p>:
-            <TextField
-              select
-              label="Select"
-              variant="standard"
-              error={error.includes("Status") ? true : false}
-              helperText={error.includes("Status") ? error : ""}
-              InputProps={{
-                readOnly: !edit,
-              }}
-              defaultValue={status}
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              {["Active", "Inactive"].map((option, index) => (
-                <MenuItem key={index} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-            </TextField>
-          </div>
-          <div style={{ display: "flex" }}>
-            <Button
-              variant="contained"
-              color="grey"
-              sx={{ marginTop: 3, marginRight: 3 }}
-              onClick={() => setEdit(true)}
-            >
-              Edit <EditIcon fontSize="small" />
-            </Button>
-            <Button
-              variant="contained"
-              sx={{ marginTop: 3 }}
-              onClick={handleSumbit}
-            >
-              Save
-            </Button>
-          </div>
-        </Box>
-      ) : (
-        <p>Complete the registration by filling the profile form</p>
-      )}
-    </div>
+    <>
+      <nav className="navbar">
+        <button className="link" onClick={() => navigate(`/home`)}>
+          Home
+        </button>
+
+        <button className="link" onClick={logout}>
+          Logout
+        </button>
+
+        <button className="link" onClick={deleteUser}>
+          Delete User
+        </button>
+      </nav>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          // alignItems: "center",
+          // height: "100%",
+        }}
+      >
+        {email && (
+          <Box
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
+              boxShadow: "rgba(0, 0, 0, 0.35) 0px 0px 8px",
+              padding: 5,
+              borderRadius: 2,
+              paddingTop: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              m: 2,
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <h2>PROFILE</h2>
+            <div className="input">
+              <p className="inputkey">First Name</p>:
+              <TextField
+                required
+                InputProps={{
+                  readOnly: !edit,
+                }}
+                defaultValue={first_name}
+                id="standard-required"
+                variant="standard"
+                error={error.includes("First Name") ? true : false}
+                helperText={error.includes("First Name") ? error : ""}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            <div className="input">
+              <p className="inputkey">Last Name</p>:
+              <TextField
+                required
+                InputProps={{
+                  readOnly: !edit,
+                }}
+                defaultValue={last_name}
+                id="standard-required"
+                variant="standard"
+                error={error.includes("Last Name") ? true : false}
+                helperText={error.includes("Last Name") ? error : ""}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+            <div className="input">
+              <p className="inputkey">Date of birth</p>:
+              <TextField
+                required
+                type="date"
+                id="standard-required"
+                variant="standard"
+                InputProps={{
+                  readOnly: !edit,
+                }}
+                defaultValue={dob}
+                error={error.includes("Birth") ? true : false}
+                helperText={error.includes("Birth") ? error : ""}
+                onChange={(e) => setDob(e.target.value)}
+              />
+            </div>
+            <div className="input">
+              <p className="inputkey">Gender</p>:
+              <TextField
+                select
+                label="Select"
+                variant="standard"
+                error={error.includes("Gender") ? true : false}
+                helperText={error.includes("Gender") ? error : ""}
+                InputProps={{
+                  readOnly: !edit,
+                }}
+                defaultValue={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+                {["Male", "Female", "Other"].map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+            <div className="input">
+              <p className="inputkey">Age</p>:
+              <TextField
+                required
+                id="standard-required"
+                type="number"
+                variant="standard"
+                error={error.includes("Age") ? true : false}
+                helperText={error.includes("Age") ? error : ""}
+                InputProps={{
+                  readOnly: !edit,
+                }}
+                defaultValue={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
+            </div>
+            <div className="input">
+              <p className="inputkey">E-Mail</p>:
+              <TextField
+                required
+                id="standard-required"
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="standard"
+                defaultValue={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="input">
+              <p className="inputkey">Phone Number</p>:
+              <TextField
+                required
+                id="standard-required"
+                InputProps={{
+                  readOnly: !edit,
+                }}
+                variant="standard"
+                defaultValue={phone}
+                error={error.includes("Phone") ? true : false}
+                helperText={error.includes("Phone") ? error : ""}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+            <div className="input">
+              <p className="inputkey">Address</p>:
+              <TextField
+                id="standard-multiline-flexible"
+                multiline
+                //   maxRows={4}
+                variant="standard"
+                error={error.includes("Address") ? true : false}
+                helperText={error.includes("Address") ? error : ""}
+                InputProps={{
+                  readOnly: !edit,
+                }}
+                defaultValue={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </div>
+            <div className="input">
+              <p className="inputkey">Nationality</p>:
+              <TextField
+                required
+                id="standard-required"
+                variant="standard"
+                error={error.includes("Nationality") ? true : false}
+                helperText={error.includes("Nationality") ? error : ""}
+                InputProps={{
+                  readOnly: !edit,
+                }}
+                defaultValue={nationality}
+                onChange={(e) => setNationality(e.target.value)}
+              />
+            </div>
+            <div className="input">
+              <p className="inputkey">Aadhar Number</p>:
+              <TextField
+                required
+                id="standard-required"
+                variant="standard"
+                error={error.includes("Aadhar") ? true : false}
+                helperText={error.includes("Aadhar") ? error : ""}
+                InputProps={{
+                  readOnly: !edit,
+                }}
+                defaultValue={aadhar}
+                onChange={(e) => setAadhar(e.target.value)}
+              />
+            </div>
+            <div className="input">
+              <p className="inputkey">Status</p>:
+              <TextField
+                select
+                label="Select"
+                variant="standard"
+                error={error.includes("Status") ? true : false}
+                helperText={error.includes("Status") ? error : ""}
+                InputProps={{
+                  readOnly: !edit,
+                }}
+                defaultValue={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                {["Active", "Inactive"].map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+            <div style={{ display: "flex" }}>
+              <Button
+                variant="contained"
+                color="grey"
+                sx={{ marginTop: 3, marginRight: 3 }}
+                onClick={() => setEdit(true)}
+              >
+                Edit <EditIcon fontSize="small" />
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ marginTop: 3 }}
+                onClick={handleSumbit}
+              >
+                Save
+              </Button>
+            </div>
+          </Box>
+        )}
+      </div>
+    </>
   );
 }
 

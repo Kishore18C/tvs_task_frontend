@@ -7,7 +7,6 @@ import baseUrl from "./generalFunctions";
 export const login = async (user) => {
   try {
     const response = await axios.post(baseUrl() + "/auth", user);
-    console.log(response.data);
 
     localStorage.setItem("token", response.data.token);
     return response;

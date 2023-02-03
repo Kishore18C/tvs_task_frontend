@@ -26,10 +26,8 @@ function PasswordOtp() {
 
     const verifyOtp = async (obj) => {
       try {
-        console.log(obj);
 
         const response = await authServices.forgotPasswordOtp(obj);
-        console.log(response.data.email);
 
         if (response.status === 200) {
           return navigation("/changepassword", {

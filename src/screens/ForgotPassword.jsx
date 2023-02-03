@@ -22,7 +22,6 @@ function ForgotPassword() {
     const verify = async (obj) => {
       try {
         const response = await authServices.forgotPassword(obj);
-        console.log(response.data.user_id);
 
         if (response.status === 200) {
           return navigation(`/passwordotp/${response.data.user_id}`, {

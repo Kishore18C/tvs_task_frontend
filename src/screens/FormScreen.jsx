@@ -30,7 +30,6 @@ export default function FormScreen() {
     try {
       const getUser = async (id) => {
         const user = await userServices.getUser(id);
-        console.log(user.data.data);
 
         if (user.status === 200) {
           setLastName(user.data.data.last_name);
@@ -57,7 +56,6 @@ export default function FormScreen() {
       status,
       aadhar_number: aadhar,
     };
-    console.log("user", user);
 
     const { error } = validateUser(user);
 

@@ -43,7 +43,6 @@ function RegisterScreen() {
     const getUser = async (obj) => {
       try {
         const user = await userServices.verifyUser(obj);
-        console.log(user.data);
 
         if (user.status === 200)
           return navigation(`/verifyotp/${user.data.user_id}`, {
