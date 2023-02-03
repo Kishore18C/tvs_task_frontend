@@ -165,7 +165,7 @@ function validateUser(user) {
           "E-Mail may not contain any spaces at the beginning or end",
       })
       .label("E-Mail"),
-    password: Joi.string().min(7).required().label("Password"),
+    password: Joi.string().required().label("Password"),
   });
   return schema.validate(user);
 }

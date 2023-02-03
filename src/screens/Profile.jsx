@@ -142,7 +142,6 @@ export default function FormScreen() {
     }
   };
 
-
   return (
     <>
       <nav className="navbar">

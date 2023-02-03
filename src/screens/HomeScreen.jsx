@@ -106,7 +106,7 @@ function HomeScreen(props) {
   return (
     <>
       <nav className="navbar">
-        <button className="link" onClick={() => navigate(`/profile/${id}`)}>
+        <button className="link" onClick={() => navigate(`/profile/${id}`, { replace: true })}>
           Profile
         </button>
 
