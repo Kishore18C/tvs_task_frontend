@@ -21,11 +21,11 @@ function RegisterScreen() {
   const navigation = useNavigate();
 
   const [error, setError] = useState("");
-  const [first_name, setFirstName] = useState("Kishore");
-  const [last_name, setLastName] = useState("C");
-  const [email, setEmail] = useState("kishorec.ck@gmail.com");
-  const [phone, setPhone] = useState("9842193573");
-  const [password, setPassword] = useState("Kid@123");
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = () => {

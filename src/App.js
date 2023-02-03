@@ -14,7 +14,7 @@ import Profile from './screens/Profile';
 
 function App() {
   return (
-    <Routes>
+    <Routes >
       <Route path="/" element={<WelcomeScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />

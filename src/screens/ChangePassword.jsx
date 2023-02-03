@@ -1,9 +1,22 @@
 import React, { useState, useContext } from "react";
 import Joi from "joi";
-import { Box, Button, TextField, Link } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Link,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  IconButton,
+  FormHelperText,
+  InputAdornment,
+} from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import * as authServices from "../services/authService";
 
@@ -15,8 +28,7 @@ function ChangePassword(props) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-
-  console.log(location.state.email);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = async () => {
     const user = { password };
@@ -79,15 +91,74 @@ function ChangePassword(props) {
         autoComplete="off"
       >
         <h1>Change Password</h1>
-
-        <TextField
+        <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">
+            Password
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? "text" : "password"}
+            error={error.includes("Password") ? true : false}
+            onChange={(e) => setPassword(e.target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword((show) => !show)}
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                  }}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+          <FormHelperText
+            error={error.includes("Password") ? true : false}
+            children={error.includes("Password") ? error : ""}
+          />
+        </FormControl>
+        {/* <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">
+          Confirm Password
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? "text" : "password"}
+            // error={error.includes("Password") ? true : false}
+            onChange={(e) => setPassword(e.target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword((show) => !show)}
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                  }}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          /> */}
+        {/* <FormHelperText
+            error={error.includes("Password") ? true : false}
+            children={error.includes("Password") ? error : ""}
+          /> */}
+        {/* </FormControl> */}
+        {/* <TextField
           type="password"
           error={error.includes("Password") ? true : false}
           id="outlined-error-helper-text"
           label="Password"
           helperText={error.includes("Password") ? error : ""}
           onChange={(e) => setPassword(e.target.value)}
-        />
+        /> */}
         <TextField
           type="password"
           // error={error.includes("Password") ? true : false}
