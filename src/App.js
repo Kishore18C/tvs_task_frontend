@@ -1,5 +1,4 @@
 import "./App.css";
-import { useEffect, useState } from "react";
 
 import WelcomeScreen from "./screens/WelcomeScreen";
 import LoginScreen from "./screens/LoginScreen";

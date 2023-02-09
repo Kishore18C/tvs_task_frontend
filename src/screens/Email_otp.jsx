@@ -3,7 +3,7 @@ import Joi from "joi";
 import { Box, Button, TextField, Link } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import * as userServices from "../services/userService";
@@ -114,8 +114,8 @@ function validateOtp(user) {
       .required()
       .messages({
         "string.pattern.base": `Invalid Otp`,
-        "string.min": "Otp should contain atleast 6 numbers",
-        "string.max": "Otp should not be more than 6 numbers",
+        "string.min": `Invalid Otp`,
+        "string.max": `Invalid Otp`,
       })
       .label("Otp"),
   });
